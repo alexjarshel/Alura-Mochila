@@ -2,16 +2,19 @@
 
 const form = document.getElementById("novoItem");
 const list = document.getElementById("lista");
+const itens = [];
 
 
 // eventos 
 form.addEventListener("submit", (evento) =>{
     evento.preventDefault();
     
-    let item =evento.target.elements['nome'].value;
-    let quantidade =evento.target.elements['quantidade'].value;
+    let item =evento.target.elements['nome'];
+    let quantidade =evento.target.elements['quantidade'];
     
-    criarElemento(item, quantidade);
+    criarElemento(item.value, quantidade.value);
+    item.value = "";
+    quantidade.value = "";
 })
 
 // funções
@@ -30,4 +33,13 @@ const criarElemento = (item,  quantidade)=>{
 
     console.log(novoItem)
     list.appendChild(novoItem);
+
+    const itemAtual = {
+        'nome' : item,
+        "quantidade" : quantidade
+    }
+
+    itens.push(itemAtual)
+
+    localStorage.setItem("item", JSON.stringify(itens));
 }
