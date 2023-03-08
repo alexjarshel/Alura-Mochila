@@ -2,7 +2,11 @@
 
 const form = document.getElementById("novoItem");
 const list = document.getElementById("lista");
-const itens = [];
+const itens = JSON.parse(localStorage.getItem("itens")) || [];
+
+itens.forEach((elemento) =>{
+    criarElemento(elemento);
+})
 
 
 // eventos 
@@ -11,35 +15,42 @@ form.addEventListener("submit", (evento) =>{
     
     let item =evento.target.elements['nome'];
     let quantidade =evento.target.elements['quantidade'];
-    
-    criarElemento(item.value, quantidade.value);
+
+
+    const itemAtual = setLocalStorage(item, quantidade);
+    criarElemento(itemAtual);
+
     item.value = "";
     quantidade.value = "";
 })
 
 // funções
 
-const criarElemento = (item,  quantidade)=>{
-    console.log(item,quantidade);
+function criarElemento(item){
 
     const novoItem = document.createElement('li');
     novoItem.classList.add("item");
 
     const quantidadeItem = document.createElement('strong');
-    quantidadeItem.innerHTML = quantidade
+    quantidadeItem.innerHTML = item.quantidade
 
     novoItem.appendChild(quantidadeItem);
-    novoItem.innerHTML += item;
+    novoItem.innerHTML += item.nome;
 
-    console.log(novoItem)
     list.appendChild(novoItem);
 
+    
+}
+
+const setLocalStorage = (item, quantidade) =>{
     const itemAtual = {
-        'nome' : item,
-        "quantidade" : quantidade
+        'nome' : item.value,
+        "quantidade" : quantidade.value
     }
 
     itens.push(itemAtual)
 
-    localStorage.setItem("item", JSON.stringify(itens));
+    localStorage.setItem("itens", JSON.stringify(itens));
+    return itemAtual;
 }
+
